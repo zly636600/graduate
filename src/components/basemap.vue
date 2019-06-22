@@ -1,6 +1,6 @@
 <template>
   <div class='basemap-chart-container'>
-    <div class='chart-name chart-name-right'>{{name}}</div>
+    <!-- <div class='chart-name chart-name-right'>{{name}}</div> -->
 		<div id = 'tooltip' style = 'position:absolute'></div>
       <div v-bind:id='id' class='basemap-container'>
    
@@ -20,10 +20,10 @@ const props = {
     type: String,
     default: () => 'basemap-chart-container',
 	},
-	name:{
-    type:String,
-    default:() => '全国',
-  },
+	// name:{
+  //   type:String,
+  //   default:() => '全国',
+  // },
   top:{
     type: Number,
     default: () => 0,
@@ -34,7 +34,7 @@ const props = {
   },
   width:{
     type: Number,
-    default: () => 700,
+    default: () => parseInt(window.innerWidth),
   },
   height:{
     type:Number,
@@ -142,19 +142,19 @@ export default{
 							.attr("d", path);
                 
        
-					// var circlesGroup = this.container.append("g");
+					var circlesGroup = this.container.append("g");
 					
-					// circlesGroup.selectAll(".location")
-					// 	 	.data(this.base_data)
-				    //  	    .enter()
-				    //  	    .append("circle")
-				    //  	    .attr("class", "location")
-					// 		.attr("transform", function(d) {
-					// 			var coor = projection([d.lon, d.lat]);
-					// 			return "translate(" + coor[0]+ "," + coor[1] +")";
-					// 		})
-                    //         .attr("r", 4)
-					// 		.attr("fill", "red")
+					circlesGroup.selectAll(".location")
+						 	.data(this.base_data)
+				     	    .enter()
+				     	    .append("circle")
+				     	    .attr("class", "location")
+							.attr("transform", function(d) {
+								var coor = projection([d.lon, d.lat]);
+								return "translate(" + coor[0]+ "," + coor[1] +")";
+							})
+                            .attr("r", 4)
+							.attr("fill", "red")
 							
 				},
  
