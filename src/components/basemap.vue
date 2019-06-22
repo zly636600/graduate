@@ -146,14 +146,14 @@ export default{
 					
 					circlesGroup.selectAll(".location")
 						 	.data(this.base_data)
-				     	    .enter()
-				     	    .append("circle")
-				     	    .attr("class", "location")
+              .enter()
+              .append("circle")
+              .attr("class", "location")
 							.attr("transform", function(d) {
 								var coor = projection([d.lon, d.lat]);
 								return "translate(" + coor[0]+ "," + coor[1] +")";
 							})
-                            .attr("r", 4)
+              .attr("r", 4)
 							.attr("fill", "red")
 							
 				},
