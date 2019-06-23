@@ -60,15 +60,15 @@ export default{
                 .style('left', this.left + 'px')
 
 
-        DataProvider.getbaseCsv().then( pigjiangResponse =>{
+        DataProvider.getbaseCsv().then( baseStationResponse =>{
 
                 DataProvider.getMapJson().then( MapResponse => {
 
-                    let pigjiangdata = dsv.csvParse(pigjiangResponse.data);
+                    let baseStationdata = dsv.csvParse(baseStationResponse.data);
 
                     let mapdata = MapResponse.data;
 
-                    this.base_data = pigjiangdata;
+                    this.base_data = baseStationdata;
 
                     this.map_data = mapdata;
 
@@ -151,7 +151,6 @@ export default{
               finalResult.push(result[key]);
             }
 
-          console.log(finalResult)
 
 					var circlesGroup = this.container.append("g");
 					
