@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 export default class DataProvider{
-    static getpigjiangCsv(){
-        return axios.get('https://raw.githubusercontent.com/zly636600/graduate/master/src/data/pigjiang.csv')
+    static getbaseCsv(){
+        return axios.get('https://raw.githubusercontent.com/zly636600/graduate/master/src/data/baseStation.csv')
     }
 
     static getMapJson() {

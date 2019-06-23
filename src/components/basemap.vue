@@ -49,8 +49,7 @@ export default{
     data () {
         return {
             map_data: {},
-            base_data:{},
-			dataset:[]
+            base_data:{}
 
         }
     },
@@ -61,7 +60,7 @@ export default{
                 .style('left', this.left + 'px')
 
 
-        DataProvider.getpigjiangCsv().then( pigjiangResponse =>{
+        DataProvider.getbaseCsv().then( pigjiangResponse =>{
 
                 DataProvider.getMapJson().then( MapResponse => {
 
@@ -77,6 +76,8 @@ export default{
 
                  })
         })
+
+
 
     },
 
@@ -102,8 +103,7 @@ export default{
 								d3.event.transform.y +")scale(" + 
 								d3.event.transform.k + ")");
 
-                d3.selectAll('.location').attr('r', 4 / d3.event.transform.k)
-            		d3.selectAll(".personLine").attr("stroke-width", 3 / d3.event.transform.k)
+                d3.selectAll('.location').attr('r', 2 / d3.event.transform.k)
                 that.scale = d3.event.transform.k; //调用zoomed函数时scale才会有定义
 							
         	}
@@ -118,7 +118,7 @@ export default{
         	//定义地图投影
         	var projection = d3.geoMercator()
 							.center([104, 31])
-							.scale(12000)
+							.scale(15000)
 							.translate([this.width / 2-200 , this.height / 2 +120]);
 
         	//定义路径
@@ -139,13 +139,24 @@ export default{
 							.append("path")
 							.attr("class", "province")
 							.style("fill", "steelblue")
-							.attr("d", path);
-                
-       
+              .attr("d", path);
+
+            let result = {};
+            let finalResult = [];
+            for(let i = 0;i<this.base_data.length;i++){
+              result[this.base_data[i].name] = this.base_data[i];
+            }
+
+            for(let key in result){
+              finalResult.push(result[key]);
+            }
+
+          console.log(finalResult)
+
 					var circlesGroup = this.container.append("g");
 					
 					circlesGroup.selectAll(".location")
-						 	.data(this.base_data)
+						 	.data(finalResult)
               .enter()
               .append("circle")
               .attr("class", "location")
@@ -153,7 +164,7 @@ export default{
 								var coor = projection([d.lon, d.lat]);
 								return "translate(" + coor[0]+ "," + coor[1] +")";
 							})
-              .attr("r", 4)
+              .attr("r", 2)
 							.attr("fill", "red")
 							
 				},
