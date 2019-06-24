@@ -11,9 +11,11 @@
 <script>
 
 const d3 = require('d3');
+const voronoi = require('d3-voronoi')
 
 import DataProvider from '../DataProvider';
 import * as dsv from 'd3-dsv';
+
 
 const props = {
   id: {
@@ -119,13 +121,15 @@ export default{
         	var projection = d3.geoMercator()
 							.center([104, 31])
 							.scale(15000)
-							.translate([this.width / 2-200 , this.height / 2 +120]);
+              .translate([this.width / 2-200 , this.height / 2 +120]);
 
         	//定义路径
         	var path = d3.geoPath()
         		 	.projection(projection);
 				
-					this.container = map_container.append("g");
+          this.container = map_container.append("g");
+          
+          var voronoiLayer = this.container.append("g")
 					
 					this.tooltip = d3.select('#tooltip')
 					//let tooltip = document.getElementById('tooltip')
