@@ -147,14 +147,16 @@ export default{
 
             let result = {};
             let finalResult = [];
+            let position = [];
             for(let i = 0;i<this.base_data.length;i++){
               result[this.base_data[i].name] = this.base_data[i];
+              var coor = projection([this.base_data.lon, this.base_data.lat]);
+              position.push([coor[0],coor[1]]);
             }
 
             for(let key in result){
               finalResult.push(result[key]);
             }
-
 
 					var circlesGroup = this.container.append("g");
 					
