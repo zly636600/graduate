@@ -11,7 +11,7 @@
 <script>
 
 const d3 = require('d3');
-const voronoi = require('d3-voronoi')
+//const voronoi = require('d3-voronoi')
 
 import DataProvider from '../DataProvider';
 import * as dsv from 'd3-dsv';
@@ -129,7 +129,7 @@ export default{
 				
           this.container = map_container.append("g");
           
-          var voronoiLayer = this.container.append("g")
+         var voronoiLayer = this.container.append("g")
 					
 					this.tooltip = d3.select('#tooltip')
 					//let tooltip = document.getElementById('tooltip')
@@ -147,30 +147,48 @@ export default{
 
             let result = {};
             let finalResult = [];
-            let position = [];
+            let positions = [];
             for(let i = 0;i<this.base_data.length;i++){
               result[this.base_data[i].name] = this.base_data[i];
-              var coor = projection([this.base_data.lon, this.base_data.lat]);
-              position.push([coor[0],coor[1]]);
             }
+           
 
             for(let key in result){
               finalResult.push(result[key]);
             }
 
-					var circlesGroup = this.container.append("g");
+            finalResult.forEach(d => {
+		            positions.push(projection(d.lat,d.lon)); //位置情報をピクセル座標に変換する
+          	});
+               console.log(positions)
+					// var circlesGroup = this.container.append("g");
 					
-					circlesGroup.selectAll(".location")
-						 	.data(finalResult)
+					// circlesGroup.selectAll(".location")
+					// 	 	.data(finalResult)
+          //     .enter()
+          //     .append("circle")
+          //     .attr("class", "location")
+					// 		.attr("transform", function(d) {
+					// 			var coor = projection([d.lon, d.lat]);
+					// 			return "translate(" + coor[0]+ "," + coor[1] +")";
+					// 		})
+          //     .attr("r", 2)
+          //     .attr("fill", "red")
+              
+            const _voronoi = d3.voronoi()
+              .extent([[-1, -1],[innerWidth+1, innerHeight+1]]);
+            
+            const polygons = _voronoi(positions).polygons();
+            
+            //境界表示
+            voronoiLayer.selectAll(".cell")
+              .data(polygons)
               .enter()
-              .append("circle")
-              .attr("class", "location")
-							.attr("transform", function(d) {
-								var coor = projection([d.lon, d.lat]);
-								return "translate(" + coor[0]+ "," + coor[1] +")";
-							})
-              .attr("r", 2)
-							.attr("fill", "red")
+              .append("path")
+              .attr("class", "cell")
+              .attr("fill", "none")
+              .attr("stroke", "black")
+              .attr("d", d => "M" + d.join("L") + "Z" );
 							
 				},
  
