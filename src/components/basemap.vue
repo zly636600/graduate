@@ -106,9 +106,11 @@ export default{
 								d3.event.transform.k + ")");
 
                 d3.selectAll('.location').attr('r', 2 / d3.event.transform.k)
+                d3.selectAll('.cell').attr('stroke-width',1/d3.event.transform.k);
                 that.scale = d3.event.transform.k; //调用zoomed函数时scale才会有定义
 							
         	}
+
 
         	var map_container = d3.select('#' + this.id)
 							.append("svg")
@@ -121,7 +123,7 @@ export default{
         	var projection = d3.geoMercator()
 							.center([104, 31])
 							.scale(15000)
-              .translate([this.width / 2-200 , this.height / 2 +120]);
+              .translate([this.width / 2-200 , this.height / 2 +250]);
 
         	//定义路径
         	var path = d3.geoPath()
@@ -129,13 +131,14 @@ export default{
 				
           this.container = map_container.append("g");
           
-         var voronoiLayer = this.container.append("g")
+         
 					
 					this.tooltip = d3.select('#tooltip')
 					//let tooltip = document.getElementById('tooltip')
 			
 					//开始加载地图
-					var regionGroups = this.container.append("g")
+          var regionGroups = this.container.append("g")
+          var voronoiLayer = this.container.append("g")
 
 					regionGroups.selectAll("path")
 							.data(this.map_data.features)
@@ -158,9 +161,8 @@ export default{
             }
 
             finalResult.forEach(d => {
-		            positions.push(projection(d.lat,d.lon)); //位置情報をピクセル座標に変換する
+		            positions.push(projection([d.lon,d.lat])); //位置情報をピクセル座標に変換する
           	});
-               console.log(positions)
 					// var circlesGroup = this.container.append("g");
 					
 					// circlesGroup.selectAll(".location")
@@ -179,7 +181,6 @@ export default{
               .extent([[-1, -1],[innerWidth+1, innerHeight+1]]);
             
             const polygons = _voronoi(positions).polygons();
-            
             //境界表示
             voronoiLayer.selectAll(".cell")
               .data(polygons)
@@ -187,9 +188,12 @@ export default{
               .append("path")
               .attr("class", "cell")
               .attr("fill", "none")
-              .attr("stroke", "black")
-              .attr("d", d => "M" + d.join("L") + "Z" );
-							
+              .attr("stroke", "white")
+              .attr("d",function(d){
+                if(d!=undefined){
+                  return  "M" + d.join("L")+ "Z";
+                }
+              } );							
 				},
  
 
