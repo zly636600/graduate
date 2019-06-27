@@ -152,13 +152,15 @@ export default{
             let finalResult = [];
             let positions = [];
             let dic_base_data = {};
-            let key = undefined;
             for(let i = 0;i<this.base_data.length;i++){
               result[this.base_data[i].name] = this.base_data[i];
-              if(key==undefined){
-                let key = this.base_data[i].name;
-                dic_base_data[key] = 0;
-                dic_base_data[key].push([this.base_data[i].HOUR(begin_date),this.base_data[i].count])                
+              let key = this.base_data[i].name;
+              if(dic_base_data[key]==undefined){
+                dic_base_data[key] = [];
+                dic_base_data[key].push({"hour":this.base_data[i].HOUR,"count":this.base_data[i].count})                
+              }
+              else{
+                dic_base_data[key].push({"hour":this.base_data[i].HOUR,"count":this.base_data[i].count})
               }
             }
            console.log(dic_base_data);
