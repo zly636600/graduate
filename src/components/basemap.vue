@@ -151,18 +151,30 @@ export default{
             let result = {};
             let finalResult = [];
             let positions = [];
+            let dic_base_data = {};
+            let key = undefined;
             for(let i = 0;i<this.base_data.length;i++){
               result[this.base_data[i].name] = this.base_data[i];
+              if(key==undefined){
+                let key = this.base_data[i].name;
+                dic_base_data[key] = 0;
+                dic_base_data[key].push([this.base_data[i].HOUR(begin_date),this.base_data[i].count])                
+              }
             }
-           
+           console.log(dic_base_data);
 
             for(let key in result){
               finalResult.push(result[key]);
             }
 
-            finalResult.forEach(d => {
-		            positions.push(projection([d.lon,d.lat])); //位置情報をピクセル座標に変換する
-          	});
+
+            // console.log(finalResult)
+
+            finalResult.forEach(function(d,p,q){
+              positions.push(projection([d.lon,d.lat])); 
+              positions[p].name = d.name;
+            })
+            //console.log(positions)
 					// var circlesGroup = this.container.append("g");
 					
 					// circlesGroup.selectAll(".location")
@@ -181,6 +193,8 @@ export default{
               .extent([[-1, -1],[innerWidth+1, innerHeight+1]]);
             
             const polygons = _voronoi(positions).polygons();
+            // console.log(polygons);
+            
             //境界表示
             voronoiLayer.selectAll(".cell")
               .data(polygons)
@@ -193,7 +207,15 @@ export default{
                 if(d!=undefined){
                   return  "M" + d.join("L")+ "Z";
                 }
-              } );							
+              } )
+              .on("mouseover",function(){
+                  d3.select(this).attr("fill",'red')
+
+              })				
+              .on("mouseout",function(){
+                d3.select(this).attr("fill","steelblue")
+              })		
+              
 				},
  
 
