@@ -163,8 +163,8 @@ export default{
                 dic_base_data[key].push({"hour":this.base_data[i].HOUR,"count":this.base_data[i].count})
               }
             }
-           console.log(dic_base_data);
 
+            console.log(this.base_data)
             for(let key in result){
               finalResult.push(result[key]);
             }
@@ -196,6 +196,8 @@ export default{
             
             const polygons = _voronoi(positions).polygons();
             // console.log(polygons);
+
+            //let that = this;
             
             //境界表示
             voronoiLayer.selectAll(".cell")
@@ -206,16 +208,20 @@ export default{
               .attr("fill", "none")
               .attr("stroke", "white")
               .attr("d",function(d){
+                //console.log(d)
                 if(d!=undefined){
                   return  "M" + d.join("L")+ "Z";
                 }
               } )
               .on("mouseover",function(){
-                  d3.select(this).attr("fill",'red')
-
-              })				
+                d3.select(this).attr('fill','red')
+              })
               .on("mouseout",function(){
-                d3.select(this).attr("fill","steelblue")
+                d3.select(this).transition().attr('fill','steelblue')
+              })
+              .on("click",function(d,i){
+                console.log(dic_base_data[d.data.name]);
+                that.$root.$emit('baseSelected',dic_base_data[d.data.name])
               })		
               
 				},

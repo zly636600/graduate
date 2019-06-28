@@ -20,6 +20,7 @@
     
     </div>   -->
     <basemap/>
+    <histogram/>
 
 
   </div>
@@ -30,11 +31,13 @@
 
 import DataProvider from './DataProvider';
 import Basemap from './components/Basemap';
+import histogram from './components/histogram'
 
 export default {
   name: 'App',
   components: {
     Basemap,
+    histogram,
   },
   data () {
     return {
