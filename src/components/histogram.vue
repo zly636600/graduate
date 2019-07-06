@@ -26,11 +26,11 @@ const props = {
 //   },
   top:{
     type: Number,
-    default: () => 330,
+    default: () => 50,
   },
   right:{
     type: Number,
-    default: () => 50,
+    default: () => 10,
   },
   width:{
     type: Number,
@@ -54,9 +54,7 @@ export default {
                 .style('right', this.right + 'px')
 
         this.$root.$on('baseSelected', (dic_base_data) => {
-            console.log("on")
              this.sel_base_data = dic_base_data	
-             console.log(this.sel_base_data)	
              this.chartInit(this.sel_base_data)
     
 				})
@@ -69,8 +67,6 @@ export default {
     methods:{
 
         chartInit(data){
-
-            var padding = {top:30, right:30, bottom:30, left:30};
 
             var histogram_container = d3.select('#' + this.id)		//matrix_container	
 										.append("svg")		
@@ -101,9 +97,6 @@ export default {
                               .domain(x.domain())
                               .thresholds(x.ticks(24))
                                 
-
-             //获取刻度
-            //var xTicks = hisData.map(function(d){return d.x0;})
 
             var xScale = d3.scaleBand()
                         .domain([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24])

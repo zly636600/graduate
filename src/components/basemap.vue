@@ -144,9 +144,10 @@ export default{
 							.data(this.map_data.features)
 							.enter()
 							.append("path")
-							.attr("class", "province")
+              .attr("class", "province")
 							.style("fill", "steelblue")
               .attr("d", path);
+
 
             let result = {};
             let finalResult = [];
@@ -163,8 +164,6 @@ export default{
                 dic_base_data[key].push({"hour":this.base_data[i].HOUR,"count":this.base_data[i].count})
               }
             }
-
-            console.log(this.base_data)
             for(let key in result){
               finalResult.push(result[key]);
             }
@@ -189,16 +188,20 @@ export default{
 					// 			return "translate(" + coor[0]+ "," + coor[1] +")";
 					// 		})
           //     .attr("r", 2)
-          //     .attr("fill", "red")
-              
+          //     .attr("fill", "red")              
             const _voronoi = d3.voronoi()
-              .extent([[-1, -1],[innerWidth+1, innerHeight+1]]);
+              .extent([[-1, -1],[innerWidth+1,innerHeight+1]])
             
             const polygons = _voronoi(positions).polygons();
-            // console.log(polygons);
-
-            //let that = this;
             
+             var clipPath = this.container.append("clipPath");
+            clipPath.selectAll(".path")
+              .data(this.map_data.features)
+              .enter()
+              .append("path")
+              .attr("d",path)
+              .attr("id","ellipse-clip")
+              
             //境界表示
             voronoiLayer.selectAll(".cell")
               .data(polygons)
@@ -207,6 +210,7 @@ export default{
               .attr("class", "cell")
               .attr("fill", "none")
               .attr("stroke", "white")
+              .attr("clip-path","url(#ellipse-clip)")
               .attr("d",function(d){
                 //console.log(d)
                 if(d!=undefined){
@@ -217,12 +221,20 @@ export default{
                 d3.select(this).attr('fill','red')
               })
               .on("mouseout",function(){
-                d3.select(this).transition().attr('fill','steelblue')
+                d3.select(this).transition().attr('fill','none')
               })
               .on("click",function(d,i){
-                console.log(dic_base_data[d.data.name]);
+                d3.select("#histogram-chart-container").selectAll("*").remove();
                 that.$root.$emit('baseSelected',dic_base_data[d.data.name])
-              })		
+              })	
+              
+           
+
+
+
+
+
+         
               
 				},
  
