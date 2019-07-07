@@ -194,13 +194,16 @@ export default{
             
             const polygons = _voronoi(positions).polygons();
             
-             var clipPath = this.container.append("clipPath");
+             var clipPath = this.container
+             .append("clipPath")
+             .attr("id","myclipPath");
+
             clipPath.selectAll(".path")
               .data(this.map_data.features)
               .enter()
               .append("path")
               .attr("d",path)
-              .attr("id","ellipse-clip")
+              
               
             //境界表示
             voronoiLayer.selectAll(".cell")
@@ -210,9 +213,8 @@ export default{
               .attr("class", "cell")
               .attr("fill", "none")
               .attr("stroke", "white")
-              .attr("clip-path","url(#ellipse-clip)")
+              .attr("clip-path","url(#myclipPath)")
               .attr("d",function(d){
-                //console.log(d)
                 if(d!=undefined){
                   return  "M" + d.join("L")+ "Z";
                 }

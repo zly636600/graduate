@@ -1,7 +1,7 @@
 <template>
-<div class='histogram-chart-container'>
+<div class='filter-chart-container'>
       <!-- <div class='chart-name chart-name-right'>{{name}}</div> -->
-      <div v-bind:id='id' class='histogram-container'>
+      <div v-bind:id='id' class='filter-container'>
    
       </div>
   </div>
@@ -18,7 +18,7 @@ import DataProvider from '../DataProvider';
 const props = {
   id: {
     type: String,
-    default: () => 'histogram-chart-container',
+    default: () => 'filter-chart-container',
   },
 //   name:{
 //     type: String,
@@ -45,7 +45,7 @@ const props = {
 
 export default {
     
-    name:'histogram-chart',
+    name:'filter-chart',
     props,
     mounted:function(){
 
@@ -53,11 +53,14 @@ export default {
                 .style('top', this.top + 'px')
                 .style('right', this.right + 'px')
 
-        this.$root.$on('baseSelected', (dic_base_data) => {
-             this.sel_base_data = dic_base_data	
-             this.chartInit(this.sel_base_data)
-    
-				})
+        DataProvider.getbaseCsv().then( baseStationResponse =>{
+
+                    let baseStationdata = dsv.csvParse(baseStationResponse.data);
+
+                    this.base_data = baseStationdata;
+
+        })
+
     },
 
     watch:{
@@ -66,18 +69,17 @@ export default {
 
     methods:{
 
-        chartInit(data){
+        chartInit(){
 
-            var histogram_container = d3.select('#' + this.id)		//matrix_container	
+            var filter_container = d3.select('#' + this.id)		//matrix_container	
 										.append("svg")		
 										.attr("width", this.width)	
-                    .attr("height", this.height);
+                                        .attr("height", this.height);
 
             data.forEach(d => {
                 d.count = parseInt(d.count);
                 d.hour = parseInt(d.hour)
             });
-            console.log(data)
             
                    
             var rectNum = 24;      //刻度的数量     
