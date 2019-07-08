@@ -81,31 +81,24 @@ export default {
                 d.hour = parseInt(d.hour)
             });
 
-            let result = {};
-            let amount = 0;
-            for(let i = 0;i < this.base_data.length;i++){
-              if(this.base_data[i].lac)
-             amount = amount + this.base_data.count;
-             
-            }
-            let result = {};
-            let finalResult = [];
-            let positions = [];
+           
             let dic_base_data = {};
             for(let i = 0;i<this.base_data.length;i++){
-              result[this.base_data[i].name] = this.base_data[i];
               let key = this.base_data[i].name;
               if(dic_base_data[key]==undefined){
                 dic_base_data[key] = [];
-                dic_base_data[key].push({"hour":this.base_data[i].HOUR,"count":this.base_data[i].count})                
+                if(i>1){
+                  let aver_amount = amount/159
+                  dic_base_data[this.base_data[i-1].name].push({"lat":this.base_data[i-1].lat,"lon":this.base_data[i-1].lon,"aver":aver_amount})
+                }
+                
+                let amount = this.base_data[i].count;               
               }
               else{
-                dic_base_data[key].push({"hour":this.base_data[i].HOUR,"count":this.base_data[i].count})
+                let amount = amount + this.base_data[i].count;
               }
             }
-            for(let key in result){
-              finalResult.push(result[key]);
-            }
+
 
                    
             var rectNum = 24;      //刻度的数量     
