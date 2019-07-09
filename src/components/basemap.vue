@@ -165,7 +165,7 @@ export default{
               }
             }
             for(let key in result){
-              finalResult.push(result[key]);
+              finalResult.push(result[key]);//画点时避免重复
             }
 
 

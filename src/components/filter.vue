@@ -81,25 +81,55 @@ export default {
                 d.hour = parseInt(d.hour)
             });
 
+            // let data = [];
+            // let amount = 0;
+            // let lac = this.base_data[0].lac;
+            // let ci = this.base_data[0].ci;
+            // for(let i = 0;i<this.base_data.length;i++){
+            //   if(lac == this.base_data[i].lac && ci == this.base_data[i].ci){
+            //     let amount = amount + this.base_data[i].count;
+
+            //   }
+            //   else{
+            //     if(i>0){
+            //       let aver_amount = amount/159;
+            //       data.push({"lon":this.base_data[i-1].lon,"lat":this.base_data[i-1].lat,"aver":aver_amout,"name":this.base_data[i-1].name})
+            //     }
+            //     let lac = this.base_data[i].lac;
+            //     let ci = this.base_data[i].ci;
+            //   }
+            // }
+
+            // let barData = [];
+            // let name = [];
+            // let aver_number = data[0].aver;
+            // for(let i = 0;i<data.length;i++){
+
+            // }
            
-            let dic_base_data = {};
-            for(let i = 0;i<this.base_data.length;i++){
-              let key = this.base_data[i].name;
-              if(dic_base_data[key]==undefined){
-                dic_base_data[key] = [];
-                if(i>1){
-                  let aver_amount = amount/159
-                  dic_base_data[this.base_data[i-1].name].push({"lat":this.base_data[i-1].lat,"lon":this.base_data[i-1].lon,"aver":aver_amount})
-                }
+            // let dic_base_data = {};
+            // for(let i = 0;i<this.base_data.length;i++){
+            //   let key = this.base_data[i].name;
+            //   if(dic_base_data[key]==undefined){
+            //     dic_base_data[key] = [];
+            //     if(i>1){
+            //       let aver_amount = amount/159
+            //       dic_base_data[this.base_data[i-1].name].push({"lat":this.base_data[i-1].lat,"lon":this.base_data[i-1].lon,"aver":aver_amount})
+            //     }
                 
-                let amount = this.base_data[i].count;               
-              }
-              else{
-                let amount = amount + this.base_data[i].count;
-              }
-            }
+            //     let amount = this.base_data[i].count;               
+            //   }
+            //   else{
+            //     let amount = amount + this.base_data[i].count;
+            //   }
+            // }
 
+            let data = d3.nest()
+            .key(function(d){return d.name})
+            .rollup(function(d){d3.sum(v,function(d){return d.count;})/159})
+            .entries(this.base_data)
 
+            
                    
             var rectNum = 24;      //刻度的数量     
             var rangeMin = 0;
