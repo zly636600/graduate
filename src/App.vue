@@ -21,6 +21,7 @@
     </div>   -->
     <basemap/>
     <histogram/>
+    <selectBase/>
 
 
   </div>
@@ -32,12 +33,14 @@
 import DataProvider from './DataProvider';
 import Basemap from './components/Basemap';
 import histogram from './components/histogram'
+import selectBase from './components/selectBase'
 
 export default {
   name: 'App',
   components: {
     Basemap,
     histogram,
+    selectBase,
   },
   data () {
     return {
