@@ -74,6 +74,10 @@ export default{
 
                     this.map_data = mapdata;
 
+                    this.base_data.forEach(d=>{
+                      d.key = d.lat + '|'+ d.lon
+                    })
+                    //console.log(this.base_data)
                     this.MapChartInit(this.map_data,this.base_data);
 
                  })
@@ -91,7 +95,8 @@ export default{
 
         MapChartInit(){
 
-		    var that = this;
+            var that = this;
+            that.$root.$emit('base_data',this.base_data)
             var zoom = d3.zoom()
                 .scaleExtent([1, 200])
                 .on("zoom", zoomed);
@@ -154,7 +159,7 @@ export default{
             let positions = [];
             let dic_base_data = {};
             for(let i = 0;i<this.base_data.length;i++){
-              result[this.base_data[i].name] = this.base_data[i];
+              result[this.base_data[i].key] = this.base_data[i];
               let key = this.base_data[i].name;
               if(dic_base_data[key]==undefined){
                 dic_base_data[key] = [];
@@ -169,30 +174,50 @@ export default{
             }
 
 
-            // console.log(finalResult)
+            console.log(finalResult)
 
             finalResult.forEach(function(d,p,q){
               positions.push(projection([d.lon,d.lat])); 
+              positions[p].key = d.key;
               positions[p].name = d.name;
             })
-            //console.log(positions)
-					// var circlesGroup = this.container.append("g");
+            console.log(positions)
+					var circlesGroup = this.container.append("g");
 					
-					// circlesGroup.selectAll(".location")
-					// 	 	.data(finalResult)
-          //     .enter()
-          //     .append("circle")
-          //     .attr("class", "location")
-					// 		.attr("transform", function(d) {
-					// 			var coor = projection([d.lon, d.lat]);
-					// 			return "translate(" + coor[0]+ "," + coor[1] +")";
-					// 		})
-          //     .attr("r", 2)
-          //     .attr("fill", "red")              
+					circlesGroup.selectAll(".location")
+						 	.data(finalResult)
+              .enter()
+              .append("circle")
+              .attr("class", "location")
+							.attr("transform", function(d) {
+                var coor = projection([104.1021,32.97204]);
+								var coor = projection([d.lon,d.lat]);
+								return "translate(" + coor[0]+ "," + coor[1] +")";
+							})
+              .attr("r", 2)
+              .attr("fill", "red")
+            
+
             const _voronoi = d3.voronoi()
               .extent([[-1, -1],[innerWidth+1,innerHeight+1]])
             
             const polygons = _voronoi(positions).polygons();
+            console.log(polygons)
+
+            let AreaData = []
+            polygons.forEach(d=>{
+              var j = 0;
+              var area = 0;
+              for (var i = 0; i < d.length; i++) {
+                j = (i + 1) % d.length;
+                area += d[i][1] * d[j][0];
+                area -= d[i][0] * d[j][1];  
+              }
+              AreaData.push({"key":d.data.key,"area":area})
+            })
+
+            //console.log(AreaData)
+            that.$root.$emit('AreaData',AreaData)
             
              var clipPath = this.container
              .append("clipPath")
@@ -211,7 +236,8 @@ export default{
               .enter()
               .append("path")
               .attr("class", "cell")
-              .attr("fill", "none")
+              .attr("fill", "blue")
+              .attr("fill-opacity",0)
               .attr("stroke", "white")
               .attr("clip-path","url(#myclipPath)")
               .attr("d",function(d){
@@ -221,9 +247,11 @@ export default{
               } )
               .on("mouseover",function(){
                 d3.select(this).attr('fill','red')
+                .attr("fill-opacity",1)
               })
               .on("mouseout",function(){
-                d3.select(this).transition().attr('fill','none')
+                d3.select(this).transition().attr('fill','blue')
+                .attr("fill-opacity",0)
               })
               .on("click",function(d,i){
                 d3.select("#histogram-chart-container").selectAll("*").remove();

@@ -53,16 +53,16 @@ export default {
                 .style('top', this.top + 'px')
                 .style('left', this.left + 'px')
 
-        DataProvider.getbaseCsv().then( baseStationResponse =>{
+       
 
-                    let baseStationdata = dsv.csvParse(baseStationResponse.data);
+        this.$root.$on('base_data',(basedata)=>{
+           this.$root.$on('AreaData', (areadata) => {
+             this.area_data = areadata	
+             this.base_data = basedata 
+             this.selectBaseChartInit(this.base_data,this.area_data);
 
-                    this.base_data = baseStationdata;
-
-                    this.selectBaseChartInit(this.base_data);
-
-        })
-
+            })                 
+        })      
     },
 
     watch:{
@@ -84,10 +84,10 @@ export default {
             });
 
             let data = d3.nest()
-            .key(function(d){return d.name})
-            .rollup(function(v){return d3.sum(v,function(d){return d.count;})/159})
-            .entries(this.base_data)
-            console.log(data)
+            .key(function(d){return d.key})
+            .rollup(function(v){return d3.sum(v,function(d){return d.count;})/48})
+            .entries(this.base_data)  
+            //console.log(data)
 
             let arr = [];
             for(var key in data){
@@ -105,9 +105,16 @@ export default {
                 .domain(d3.extent(arr)).nice()
                 .range([0, xAxisWidth])
 
+            let ticks = [], step = 30
+
+            for (let i =0;i<600;i+=step){
+
+              ticks.push(i)
+            }
+
             var histogram = d3.histogram()  //直方图布局
                               .domain(x.domain())
-                              .thresholds(x.ticks(40))
+                              .thresholds(ticks)
 
             var hisData = histogram(arr)      
             
@@ -144,9 +151,9 @@ export default {
                 .attr("transform","translate("+padding.left+","+0+")")
                 .call(yAxis)
 
-            selectBase_container.selectAll('.axis').selectAll('path').attr('stroke','white').attr('opacity','0.5')
-			      selectBase_container.selectAll('.axis').selectAll('line').attr('stroke','white').attr('opacity','0.5')
-			      selectBase_container.selectAll('.axis').selectAll('text').attr('fill','white').attr('opacity','0.5')
+            selectBase_container.selectAll('.axis').selectAll('path').attr('stroke','white')
+			      selectBase_container.selectAll('.axis').selectAll('line').attr('stroke','white')
+			      selectBase_container.selectAll('.axis').selectAll('text').attr('fill','white')
                 
                 
             var hisRect = selectBase_container.append("g")
