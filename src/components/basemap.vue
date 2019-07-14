@@ -201,7 +201,7 @@ export default{
               .extent([[-1, -1],[innerWidth+1,innerHeight+1]])
             
             const polygons = _voronoi(positions).polygons();
-            console.log(polygons)
+             console.log(polygons)
 
             let AreaData = []
             polygons.forEach(d=>{
