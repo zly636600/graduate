@@ -89,6 +89,13 @@ export default {
             .entries(this.base_data)  
             //console.log(data)
 
+            this.area_data
+            for(let i = 0;i<this.area_data.length;i++){
+              
+            }
+
+
+
             let arr = [];
             for(var key in data){
               arr.push(data[key].value)

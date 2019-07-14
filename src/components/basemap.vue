@@ -174,35 +174,34 @@ export default{
             }
 
 
-            console.log(finalResult)
+            //console.log(finalResult)
 
             finalResult.forEach(function(d,p,q){
               positions.push(projection([d.lon,d.lat])); 
               positions[p].key = d.key;
               positions[p].name = d.name;
             })
-            console.log(positions)
-					var circlesGroup = this.container.append("g");
+            //console.log(positions)
+					// var circlesGroup = this.container.append("g");
 					
-					circlesGroup.selectAll(".location")
-						 	.data(finalResult)
-              .enter()
-              .append("circle")
-              .attr("class", "location")
-							.attr("transform", function(d) {
-                var coor = projection([104.1021,32.97204]);
-								var coor = projection([d.lon,d.lat]);
-								return "translate(" + coor[0]+ "," + coor[1] +")";
-							})
-              .attr("r", 2)
-              .attr("fill", "red")
+					// circlesGroup.selectAll(".location")
+					// 	 	.data(finalResult)
+          //     .enter()
+          //     .append("circle")
+          //     .attr("class", "location")
+					// 		.attr("transform", function(d) {
+					// 			var coor = projection([d.lon,d.lat]);
+					// 			return "translate(" + coor[0]+ "," + coor[1] +")";
+					// 		})
+          //     .attr("r", 2)
+          //     .attr("fill", "red")
             
 
             const _voronoi = d3.voronoi()
               .extent([[-1, -1],[innerWidth+1,innerHeight+1]])
             
             const polygons = _voronoi(positions).polygons();
-            console.log(polygons)
+            //console.log(polygons)
 
             let AreaData = []
             polygons.forEach(d=>{
