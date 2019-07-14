@@ -89,10 +89,12 @@ export default {
             .entries(this.base_data)  
             //console.log(data)
 
-            this.area_data
+            
             for(let i = 0;i<this.area_data.length;i++){
-              
+              let asd = this.area_data[i].key;
+              this.area_data[i].aver = data[i].value;
             }
+            //console.log(this.area_data)
 
 
 
