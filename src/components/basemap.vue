@@ -66,9 +66,13 @@ export default{
 
                 DataProvider.getMapJson().then( MapResponse => {
 
+                  DataProvider.getMianYangJson().then( MianYangResponse=>{
+
                     let baseStationdata = dsv.csvParse(baseStationResponse.data);
 
                     let mapdata = MapResponse.data;
+
+                    let mianyang_data = 
 
                     this.base_data = baseStationdata;
 
@@ -80,6 +84,9 @@ export default{
                     //console.log(this.base_data)
                     this.MapChartInit(this.map_data,this.base_data);
 
+
+                  })
+  
                  })
         })
 
@@ -202,6 +209,8 @@ export default{
             
             const polygons = _voronoi(positions).polygons();
              console.log(polygons)
+
+            
 
             let AreaData = []
             polygons.forEach(d=>{

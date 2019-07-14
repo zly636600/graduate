@@ -11,4 +11,9 @@ export default class DataProvider{
 
         return axios.get('https://raw.githubusercontent.com/zly636600/graduate/master/src/data/china.json')
     }
+
+    static getMianYangJson(){
+        return axios.get('https://raw.githubusercontent.com/zly636600/graduate/master/src/data/mianyang.json')
+    }
+
 }
