@@ -210,8 +210,8 @@ export default{
               .extent([[-1, -1],[innerWidth+1,innerHeight+1]])
             
             const polygons = _voronoi(positions).polygons();
-             console.log(polygons)
-             console.log(this.mianyang_data.data)
+             //console.log(polygons)
+             //console.log(this.mianyang_data.data)
 
             // let AreaData = [];
             // for(let i = 0;i<polygons.length;i++){
@@ -230,22 +230,60 @@ export default{
             //   AreaData.push({"key":polygons[i].data.key,"area":area_intersection})
             // }
 
+            // var poly1 = turf.polygon([[
+            //   [-122.801742, 45.48565],
+            //   [-122.801742, 45.60491],
+            //   [-122.584762, 45.60491],
+            //   [-122.584762, 45.48565],
+            //   [-122.801742, 45.48565]
+            // ]]);
+
+            // var poly2 = turf.polygon([[
+            //   [-122.520217, 45.535693],
+            //   [-122.64038, 45.553967],
+            //   [-122.720031, 45.526554],
+            //   [-122.669906, 45.507309],
+            //   [-122.723464, 45.446643],
+            //   [-122.532577, 45.408574],
+            //   [-122.487258, 45.477466],
+            //   [-122.520217, 45.535693]
+            // ]]);
+
+            // var intersection = turf.intersect(poly1, poly2);
+
+            // //addToMap
+            // var addToMap = [poly1, poly2, intersection];
+
+            //console.log(addToMap)
+
+
             let AreaData = []
-            polygons.forEach(d=>{
-              let points = {}
-              points.type = "Feature"
-              points.geometry = {};
-              points.geometry.type = "Polygon"
-              points.geometry.coordinates = [];
+            polygons.forEach(d => {
+              let points = [];
+              points[0] = [];
               for (var i = 0; i < d.length; i++) {
-                 points.geometry.coordinates[i] = [];
-                 points.geometry.coordinates[i] = projection.invert([d[i][0],d[i][1]])
+                 points[0][i] = [];
+                 points[0][i]= projection.invert([d[i][0],d[i][1]])
               }
-              console.log(points)
-              var intersection = turf.intersect(points, this.mianyang_data.data);
-              console.log(intersection)
-              var area_intersection = geojsonArea.geometry(intersection.geometry);
-              AreaData.push({"key":d.data.key,"area":area_intersection})
+              points[0][d.length] = projection.invert([d[0][0],d[0][1]])
+              //console.log(points)
+              //console.log(this.mianyang_data.data.geometry.coordinates)
+              this.mianyang_data.data.geometry.coordinates[0][this.mianyang_data.data.geometry.coordinates.length]=this.mianyang_data.data.geometry.coordinates[0][0]
+              let poly1 = turf.polygon(points)
+              //console.log(poly1)
+              let poly2 = turf.polygon(this.mianyang_data.data.geometry.coordinates)
+              var intersection = turf.intersect(poly1, poly2);
+              //console.log(intersection)
+              if(intersection){
+
+                var area_intersection = turf.area(intersection);
+                AreaData.push({"key":d.data.key,"area":area_intersection})
+              }
+              else{
+
+                console.log(poly1, poly2)
+              }
+             
             })
 
 
