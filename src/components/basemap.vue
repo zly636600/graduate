@@ -11,11 +11,11 @@
 <script>
 
 const d3 = require('d3');
-//const voronoi = require('d3-voronoi')
 
 import DataProvider from '../DataProvider';
 import * as dsv from 'd3-dsv';
-
+var turf = require('turf');
+var geojsonArea = require('geojson-area');
 
 const props = {
   id: {
@@ -72,11 +72,13 @@ export default{
 
                     let mapdata = MapResponse.data;
 
-                    let mianyang_data = 
+                    let mianyangData = MianYangResponse
 
                     this.base_data = baseStationdata;
 
                     this.map_data = mapdata;
+                    
+                    this.mianyang_data = mianyangData;
 
                     this.base_data.forEach(d=>{
                       d.key = d.lat + '|'+ d.lon
@@ -209,22 +211,57 @@ export default{
             
             const polygons = _voronoi(positions).polygons();
              console.log(polygons)
+             console.log(this.mianyang_data.data)
 
-            
+            // let AreaData = [];
+            // for(let i = 0;i<polygons.length;i++){
+            //     let points = {}
+            //     points.type = "Feature"
+            //     points.geometry = {};
+            //     points.geometry.type = "Polygon"
+            //     points.geometry.coordinates = [];
+            //     for(let m = 0;m<polygons[i].length;m++){
+            //       points.geometry.coordinates[m] = [];
+            //       points.geometry.coordinates[m] = projection.invert([polygons[i][m][0],polygons[i][m][1]])
+            //     }
+            //   console.log(points)
+            //   var intersection = turf.intersect(points, this.mianyang_data.data);
+            //   var area_intersection = geojsonArea.geometry(intersection.geometry);
+            //   AreaData.push({"key":polygons[i].data.key,"area":area_intersection})
+            // }
 
             let AreaData = []
             polygons.forEach(d=>{
-              var j = 0;
-              var area = 0;
+              let points = {}
+              points.type = "Feature"
+              points.geometry = {};
+              points.geometry.type = "Polygon"
+              points.geometry.coordinates = [];
               for (var i = 0; i < d.length; i++) {
-                j = (i + 1) % d.length;
-                area += d[i][1] * d[j][0];
-                area -= d[i][0] * d[j][1];  
+                 points.geometry.coordinates[i] = [];
+                 points.geometry.coordinates[i] = projection.invert([d[i][0],d[i][1]])
               }
-              AreaData.push({"key":d.data.key,"area":area})
+              console.log(points)
+              var intersection = turf.intersect(points, this.mianyang_data.data);
+              console.log(intersection)
+              var area_intersection = geojsonArea.geometry(intersection.geometry);
+              AreaData.push({"key":d.data.key,"area":area_intersection})
             })
 
-            //console.log(AreaData)
+
+            // let AreaData = []
+            // polygons.forEach(d=>{
+            //   var j = 0;
+            //   var area = 0;
+            //   for (var i = 0; i < d.length; i++) {
+            //     j = (i + 1) % d.length;
+            //     area += d[i][1] * d[j][0];
+            //     area -= d[i][0] * d[j][1];  
+            //   }
+            //   AreaData.push({"key":d.data.key,"area":area})
+            // })
+
+            console.log(AreaData)
             that.$root.$emit('AreaData',AreaData)
             
              var clipPath = this.container
