@@ -94,16 +94,28 @@ export default {
               let asd = this.area_data[i].key;
               this.area_data[i].aver = data[i].value;
             }
-            //console.log(this.area_data)
+            console.log(this.area_data)
 
-
+            let AreaMax = d3.max(this.area_data,function(d){return d.area})
+            let AreaMin = d3.min(this.area_data,function(d){return d.area})
+            let AverMax = d3.max(this.area_data,function(d){return d.aver})
+            let AverMin = d3.min(this.area_data,function(d){return d.aver})
 
             let arr = [];
-            for(var key in data){
-              arr.push(data[key].value)
-            }
+           this.area_data.forEach(d=>{
+             d.area = (d.area-AreaMin)/(AreaMax-AreaMin)
+             d.aver = (d.aver-AverMin)/(AverMax-AreaMin)
+             arr.push(Math.sqrt((d.area+d.aver)/2)*50)
+             //arr.push(d.aver*50)
+           })
+           console.log(d3.min(arr),d3.max(arr))
 
-            //console.log(arr)
+            // let arr = [];
+            // for(var key in data){
+            //   arr.push(data[key].value)
+            // }
+
+            console.log(arr)
                       
             var xAxisWidth = 800;
             
@@ -112,11 +124,11 @@ export default {
             //定义x轴比例尺			
             let x = d3.scaleLinear()
                 .domain(d3.extent(arr)).nice()
-                .range([0, xAxisWidth])
+                .range([0,xAxisWidth])
 
-            let ticks = [], step = 30
+            let ticks = [], step = 1
 
-            for (let i =0;i<600;i+=step){
+            for (let i =0;i<36;i+=step){
 
               ticks.push(i)
             }
@@ -131,10 +143,13 @@ export default {
             
             var xTicks = hisData.map(function(d){return d.x0})
 
-            var xScale = d3.scaleBand()
-                        .domain(xTicks)
-                        .rangeRound([padding.left,xAxisWidth-padding.right])
-                        .padding(0.1);
+            //console.log(d3.extent(hisData, d => d.x0))
+
+            var xScale = d3.scaleLinear()
+                        //.domain(d3.extent(hisData, d => d.x0))
+                        .domain([0,36])
+                        .range([padding.left,xAxisWidth-padding.right])
+                        //.padding(0.1);
 
             var yAxisWidth = 400;
             var yScale = d3.scaleLinear()
@@ -143,8 +158,9 @@ export default {
             //绘制x轴					
             var xAxis = d3.axisBottom()
                         .scale(xScale)
-                        .tickValues(xScale.domain())
-                        //.tickFormat(d3.format(".0f"));
+                        //.tickValues(xScale.domain())
+                        .ticks(20)
+                        .tickFormat(d3.format(".0f"));
                         
             selectBase_container.append("g")
                 .attr("class","axis")
@@ -177,12 +193,35 @@ export default {
                         return xScale(d.x0);
                     })
                     .attr("y", d => yScale(d.length))
-                    .attr("width",function(d,i){
-                        return xScale.bandwidth();
-                    })
+                    .attr("width", 13)
+                    // .attr("width",function(d,i){
+                    //     return xScale.bandwidth();
+                    // })
                     .attr("height", d => yScale.range()[0]-yScale(d.length))
                     .attr("fill","steelblue")
+
+            var brush_width = this.width - padding.left - padding.right;
+            var brush_height = this.height - padding.top - padding.bottom;
+
+            var that = this;
         
+            var brush = d3.brushX()
+            .extent([[0,0],[brush_width,brush_height]])
+            .on("end", d=>{
+
+              //console.log(d)
+                var ext = d3.event.selection.map(xScale.invert)
+                console.log(ext)
+                // that.$root.$emit('days', ext)
+            })
+            var brushg = selectBase_container.append("g")
+            .attr("class", "brush")
+            .call(brush)
+
+            brushg.selectAll("rect")
+            .attr("height", brush_height)
+            .attr("opacity", 0.3)
+            .attr("transform", "translate(" + 0 + "," + padding.bottom + ")")
 
         }
 

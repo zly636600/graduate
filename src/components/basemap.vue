@@ -181,6 +181,7 @@ export default{
             for(let key in result){
               finalResult.push(result[key]);//画点时避免重复
             }
+            
 
 
             //console.log(finalResult)
@@ -190,74 +191,14 @@ export default{
               positions[p].key = d.key;
               positions[p].name = d.name;
             })
-            //console.log(positions)
-					// var circlesGroup = this.container.append("g");
-					
-					// circlesGroup.selectAll(".location")
-					// 	 	.data(finalResult)
-          //     .enter()
-          //     .append("circle")
-          //     .attr("class", "location")
-					// 		.attr("transform", function(d) {
-					// 			var coor = projection([d.lon,d.lat]);
-					// 			return "translate(" + coor[0]+ "," + coor[1] +")";
-					// 		})
-          //     .attr("r", 2)
-          //     .attr("fill", "red")
-            
 
             const _voronoi = d3.voronoi()
               .extent([[-1, -1],[innerWidth+1,innerHeight+1]])
             
             const polygons = _voronoi(positions).polygons();
-             //console.log(polygons)
-             //console.log(this.mianyang_data.data)
-
-            // let AreaData = [];
-            // for(let i = 0;i<polygons.length;i++){
-            //     let points = {}
-            //     points.type = "Feature"
-            //     points.geometry = {};
-            //     points.geometry.type = "Polygon"
-            //     points.geometry.coordinates = [];
-            //     for(let m = 0;m<polygons[i].length;m++){
-            //       points.geometry.coordinates[m] = [];
-            //       points.geometry.coordinates[m] = projection.invert([polygons[i][m][0],polygons[i][m][1]])
-            //     }
-            //   console.log(points)
-            //   var intersection = turf.intersect(points, this.mianyang_data.data);
-            //   var area_intersection = geojsonArea.geometry(intersection.geometry);
-            //   AreaData.push({"key":polygons[i].data.key,"area":area_intersection})
-            // }
-
-            // var poly1 = turf.polygon([[
-            //   [-122.801742, 45.48565],
-            //   [-122.801742, 45.60491],
-            //   [-122.584762, 45.60491],
-            //   [-122.584762, 45.48565],
-            //   [-122.801742, 45.48565]
-            // ]]);
-
-            // var poly2 = turf.polygon([[
-            //   [-122.520217, 45.535693],
-            //   [-122.64038, 45.553967],
-            //   [-122.720031, 45.526554],
-            //   [-122.669906, 45.507309],
-            //   [-122.723464, 45.446643],
-            //   [-122.532577, 45.408574],
-            //   [-122.487258, 45.477466],
-            //   [-122.520217, 45.535693]
-            // ]]);
-
-            // var intersection = turf.intersect(poly1, poly2);
-
-            // //addToMap
-            // var addToMap = [poly1, poly2, intersection];
-
-            //console.log(addToMap)
-
-
+             
             let AreaData = []
+            //构造poly1 poly2计算相交的面积
             polygons.forEach(d => {
               let points = [];
               points[0] = [];
@@ -266,38 +207,16 @@ export default{
                  points[0][i]= projection.invert([d[i][0],d[i][1]])
               }
               points[0][d.length] = projection.invert([d[0][0],d[0][1]])
-              //console.log(points)
-              //console.log(this.mianyang_data.data.geometry.coordinates)
               this.mianyang_data.data.geometry.coordinates[0][this.mianyang_data.data.geometry.coordinates.length]=this.mianyang_data.data.geometry.coordinates[0][0]
               let poly1 = turf.polygon(points)
-              //console.log(poly1)
               let poly2 = turf.polygon(this.mianyang_data.data.geometry.coordinates)
               var intersection = turf.intersect(poly1, poly2);
-              //console.log(intersection)
               if(intersection){
 
                 var area_intersection = turf.area(intersection);
-                AreaData.push({"key":d.data.key,"area":area_intersection})
+                AreaData.push({"key":d.data.key,"area":area_intersection/1000000,"name":d.data.name})
               }
-              else{
-
-                console.log(poly1, poly2)
-              }
-             
             })
-
-
-            // let AreaData = []
-            // polygons.forEach(d=>{
-            //   var j = 0;
-            //   var area = 0;
-            //   for (var i = 0; i < d.length; i++) {
-            //     j = (i + 1) % d.length;
-            //     area += d[i][1] * d[j][0];
-            //     area -= d[i][0] * d[j][1];  
-            //   }
-            //   AreaData.push({"key":d.data.key,"area":area})
-            // })
 
             console.log(AreaData)
             that.$root.$emit('AreaData',AreaData)
