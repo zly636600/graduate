@@ -196,6 +196,8 @@ export default{
               .extent([[-1, -1],[innerWidth+1,innerHeight+1]])
             
             const polygons = _voronoi(positions).polygons();
+
+            console.log(polygons)
              
             let AreaData = []
             //构造poly1 poly2计算相交的面积
@@ -214,7 +216,7 @@ export default{
               if(intersection){
 
                 var area_intersection = turf.area(intersection);
-                AreaData.push({"key":d.data.key,"area":area_intersection/1000000,"name":d.data.name})
+                AreaData.push({"key":d.data.key,"area":area_intersection/1000000,"name":d.data.name,"polyg":d})
               }
             })
 
