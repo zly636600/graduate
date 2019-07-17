@@ -210,10 +210,10 @@ export default {
 
               //console.log(d)
                 var ext = d3.event.selection.map(xScale.invert)
-                console.log(ext)
+                //console.log(ext)
                 let x0 = ext[0];
                 let x1 = ext[1];
-                console.log(x0,x1)
+                //console.log(x0,x1)
                 let indexValue = [];
                 for(let i = 0;i<arr.length;i++){
                   if(arr[i]>=x0 && arr[i]<=x1){
@@ -221,23 +221,16 @@ export default {
                   }
                 }
                 let selPoly = []
-                for(let j = 0;j<=indexValue.length;j++){
-                  that.area_data.forEach(function(d,p,q){
-                    if(p = indexValue[j]){
-                       selPoly.push(d.polyg)
-                     }
-                  })
-                }
-                // that.area_data.forEach(function(d,p,q){
-                //   for(let j = 0;j<indexValue.length;j++){
-                //     if(p = indexValue[j]){
-                //       selPoly.push(d.polyg)
-                //     }
-                //   }
-                // })
+                for(let j = 0;j<indexValue.length;j++){
+                  let indexNumber = indexValue[j];
+                  if(that.area_data[indexNumber].polyg){
+                    let polyData = that.area_data[indexNumber].polyg
+                    //console.log(polyData)
+                    selPoly.push(polyData)
+                  }
                 
-                // that.$root.$emit('days', ext)
-                console.log(indexValue)
+                }
+                that.$root.$emit('selPoly', selPoly)
                 console.log(selPoly)
             })
             var brushg = selectBase_container.append("g")

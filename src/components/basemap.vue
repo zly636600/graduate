@@ -57,6 +57,13 @@ export default{
     },
     mounted:function(){
 
+
+        this.$root.$on('selPoly', (selPoly) => {
+					//console.log('on')
+					this.highlightMap(selPoly)
+					
+				})
+
         d3.select(d3.select('#' + this.id).node().parentNode)
                 .style('top', this.top + 'px')
                 .style('left', this.left + 'px')
