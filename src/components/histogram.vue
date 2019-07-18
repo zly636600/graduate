@@ -26,7 +26,7 @@ const props = {
 //   },
   top:{
     type: Number,
-    default: () => 50,
+    default: () => 30,
   },
   right:{
     type: Number,
@@ -34,7 +34,7 @@ const props = {
   },
   width:{
     type: Number,
-    default: () => 500,
+    default: () => 400,
   },
   height:{
     type:Number,
@@ -84,7 +84,7 @@ export default {
             var rangeMin = 0;
             var rangeMax = 24;
                       
-            var xAxisWidth = 500;
+            var xAxisWidth = 400;
             
             var padding = {top:30, right:30, bottom:30, left:30};
             
@@ -103,7 +103,7 @@ export default {
                         .rangeRound([padding.left,xAxisWidth-padding.right])
                         .padding(0.1);
 
-            var yAxisWidth = 400;
+            var yAxisWidth = 300;
             var yScale = d3.scaleLinear()
                             .domain([0,d3.max(data,function(d){return d.count;}) ])
                             .range([yAxisWidth-padding.bottom,padding.top]);
@@ -127,9 +127,9 @@ export default {
                 .attr("transform","translate("+padding.left+","+0+")")
                 .call(yAxis)
 
-            histogram_container.selectAll('.axis').selectAll('path').attr('stroke','white').attr('opacity','0.5')
-			      histogram_container.selectAll('.axis').selectAll('line').attr('stroke','white').attr('opacity','0.5')
-			      histogram_container.selectAll('.axis').selectAll('text').attr('fill','white').attr('opacity','0.5')
+            // histogram_container.selectAll('.axis').selectAll('path').attr('stroke','white').attr('opacity','0.5')
+			      // histogram_container.selectAll('.axis').selectAll('line').attr('stroke','white').attr('opacity','0.5')
+			      // histogram_container.selectAll('.axis').selectAll('text').attr('fill','white').attr('opacity','0.5')
                 
                 
             var hisRect = histogram_container.append("g")

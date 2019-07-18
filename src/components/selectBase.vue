@@ -26,19 +26,19 @@ const props = {
 //   },
   top:{
     type: Number,
-    default: () => 600,
+    default: () => 30,
   },
   left:{
     type: Number,
-    default: () => 50,
+    default: () => 20,
   },
   width:{
     type: Number,
-    default: () => 800,
+    default: () => 400,
   },
   height:{
     type:Number,
-    default: () => 400,
+    default: () => 200,
   }
 
 };
@@ -94,7 +94,7 @@ export default {
               let asd = this.area_data[i].key;
               this.area_data[i].aver = data[i].value;
             }
-            console.log(this.area_data)
+            //console.log(this.area_data)
 
             let AreaMax = d3.max(this.area_data,function(d){return d.area})
             let AreaMin = d3.min(this.area_data,function(d){return d.area})
@@ -108,16 +108,16 @@ export default {
              arr.push(Math.sqrt((d.area+d.aver)/2)*50)
              //arr.push(d.aver*50)
            })
-           console.log(d3.min(arr),d3.max(arr))
+           //console.log(d3.min(arr),d3.max(arr))
 
             // let arr = [];
             // for(var key in data){
             //   arr.push(data[key].value)
             // }
 
-            console.log(arr)
+            //console.log(arr)
                       
-            var xAxisWidth = 800;
+            var xAxisWidth = 400;
             
             var padding = {top:35, right:35, bottom:35, left:35};
             
@@ -151,7 +151,7 @@ export default {
                         .range([padding.left,xAxisWidth-padding.right])
                         //.padding(0.1);
 
-            var yAxisWidth = 400;
+            var yAxisWidth = 150;
             var yScale = d3.scaleLinear()
                             .domain([d3.min(hisData,function(d){return d.length;}),d3.max(hisData,function(d){return d.length;}) ])
                             .range([yAxisWidth-padding.bottom,padding.top]);
@@ -169,6 +169,7 @@ export default {
             //绘制y轴	
             var yAxis = d3.axisLeft()
                         .scale(yScale)
+                        .ticks(4)
                         .tickFormat(d3.format(".0f"));
             
             selectBase_container.append("g")
@@ -176,9 +177,9 @@ export default {
                 .attr("transform","translate("+padding.left+","+0+")")
                 .call(yAxis)
 
-            selectBase_container.selectAll('.axis').selectAll('path').attr('stroke','white')
-			      selectBase_container.selectAll('.axis').selectAll('line').attr('stroke','white')
-			      selectBase_container.selectAll('.axis').selectAll('text').attr('fill','white')
+            // selectBase_container.selectAll('.axis').selectAll('path').attr('stroke','white')
+			      // selectBase_container.selectAll('.axis').selectAll('line').attr('stroke','white')
+			      // selectBase_container.selectAll('.axis').selectAll('text').attr('fill','white')
                 
                 
             var hisRect = selectBase_container.append("g")
@@ -193,15 +194,15 @@ export default {
                         return xScale(d.x0);
                     })
                     .attr("y", d => yScale(d.length))
-                    .attr("width", 13)
+                    .attr("width", 7)
                     // .attr("width",function(d,i){
                     //     return xScale.bandwidth();
                     // })
                     .attr("height", d => yScale.range()[0]-yScale(d.length))
                     .attr("fill","steelblue")
 
-            var brush_width = this.width - padding.left - padding.right;
-            var brush_height = this.height - padding.top - padding.bottom;
+            var brush_width = this.width - padding.left - padding.right+40;
+            var brush_height = this.height - padding.top - padding.bottom-35.;
             let that = this;
         
             var brush = d3.brushX()
@@ -226,12 +227,12 @@ export default {
                   if(that.area_data[indexNumber].polyg){
                     let polyData = that.area_data[indexNumber].polyg
                     //console.log(polyData)
-                    selPoly.push(polyData)
+                    selPoly.push(polyData.data.key)
                   }
                 
                 }
                 that.$root.$emit('selPoly', selPoly)
-                console.log(selPoly)
+                //console.log(selPoly)
             })
             var brushg = selectBase_container.append("g")
             .attr("class", "brush")

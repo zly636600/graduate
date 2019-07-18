@@ -60,7 +60,7 @@ export default{
 
         this.$root.$on('selPoly', (selPoly) => {
 					//console.log('on')
-					this.highlightMap(selPoly)
+					this.highLightVoronoi(selPoly)
 					
 				})
 
@@ -88,7 +88,10 @@ export default{
                     this.mianyang_data = mianyangData;
 
                     this.base_data.forEach(d=>{
-                      d.key = d.lat + '|'+ d.lon
+                      d.key = d.lat + '_'+ d.lon
+                      d.key = d.key.replace(".","_")
+                      d.key = d.key.replace(".","_")
+                      d.key = "A"+d.key
                     })
                     //console.log(this.base_data)
                     this.MapChartInit(this.map_data,this.base_data);
@@ -166,7 +169,8 @@ export default{
 							.enter()
 							.append("path")
               .attr("class", "province")
-							.style("fill", "steelblue")
+              .style("fill", "steelblue")
+              .attr("fill-opacity",0.6)
               .attr("d", path);
 
 
@@ -204,7 +208,7 @@ export default{
             
             const polygons = _voronoi(positions).polygons();
 
-            console.log(polygons)
+            //console.log(polygons)
              
             let AreaData = []
             //构造poly1 poly2计算相交的面积
@@ -227,7 +231,7 @@ export default{
               }
             })
 
-            console.log(AreaData)
+            //console.log(AreaData)
             that.$root.$emit('AreaData',AreaData)
             
              var clipPath = this.container
@@ -247,6 +251,9 @@ export default{
               .enter()
               .append("path")
               .attr("class", "cell")
+              .attr("id",function(d){
+                return d.data.key
+              })
               .attr("fill", "blue")
               .attr("fill-opacity",0)
               .attr("stroke", "white")
@@ -256,28 +263,39 @@ export default{
                   return  "M" + d.join("L")+ "Z";
                 }
               } )
-              .on("mouseover",function(){
-                d3.select(this).attr('fill','red')
-                .attr("fill-opacity",1)
-              })
-              .on("mouseout",function(){
-                d3.select(this).transition().attr('fill','blue')
-                .attr("fill-opacity",0)
-              })
+              // .on("mouseover",function(){
+              //   d3.select(this).attr('fill','red')
+              //   .attr("fill-opacity",1)
+              // })
+              // .on("mouseout",function(){
+              //   d3.select(this).transition().attr('fill','blue')
+              //   .attr("fill-opacity",0)
+              // })
               .on("click",function(d,i){
                 d3.select("#histogram-chart-container").selectAll("*").remove();
                 that.$root.$emit('baseSelected',dic_base_data[d.data.name])
               })	
-              
-           
+          
+        },
+        
+        highLightVoronoi(data){
+          
+            d3.selectAll(".cell")
+            .attr("fill","steelblue")
+            .attr("fill-opacity",0.6)
 
+            //console.log(d3.select('#' + d))
+        
 
+          data.forEach(d=>{
+            d3.select('#' + d)
+            .attr("fill","steelblue")
+            .attr("fill-opacity",1)
+            
 
+          })
 
-
-         
-              
-				},
+        }
  
 
     }
