@@ -289,7 +289,7 @@ export default{
 
           data.forEach(d=>{
             d3.select('#' + d)
-            .attr("fill","steelblue")
+            .attr("fill","#F26101")
             .attr("fill-opacity",1)
             
 
