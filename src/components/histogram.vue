@@ -13,6 +13,7 @@ const d3 = require('d3');
 
 import * as dsv from 'd3-dsv'
 
+
 import DataProvider from '../DataProvider';
 
 const props = {
@@ -57,7 +58,12 @@ export default {
              this.sel_base_data = dic_base_data	
              this.chartInit(this.sel_base_data)
     
-				})
+        })
+        //console.log(this.sel_base_data)
+
+      
+        
+
     },
 
     watch:{
@@ -77,7 +83,7 @@ export default {
                 d.count = parseInt(d.count);
                 d.hour = parseInt(d.hour)
             });
-            console.log(data)
+           // console.log(data)
             
                    
             var rectNum = 24;      //刻度的数量     

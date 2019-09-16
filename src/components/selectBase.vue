@@ -13,6 +13,8 @@ const d3 = require('d3');
 
 import * as dsv from 'd3-dsv'
 
+
+
 import DataProvider from '../DataProvider';
 
 const props = {
@@ -62,7 +64,9 @@ export default {
              this.selectBaseChartInit(this.base_data,this.area_data);
 
             })                 
-        })      
+        })  
+        
+        
     },
 
     watch:{
@@ -189,7 +193,7 @@ export default {
                     .data(hisData)
                     .enter()
                     .append("rect")
-                    .attr("class","rect")
+                    .attr("class","rect") 
                     .attr("x",function(d,i){
                         return xScale(d.x0);
                     })

@@ -13,6 +13,8 @@ const d3 = require('d3');
 
 import * as dsv from 'd3-dsv'
 
+import $ from 'jquery';
+
 import DataProvider from '../DataProvider';
 
 const props = {
@@ -52,16 +54,14 @@ export default {
                 .style('top', this.top + 'px')
                 .style('left', this.left + 'px')
 
-       
-
-        this.$root.$on('base_data',(basedata)=>{
-           this.$root.$on('AreaData', (areadata) => {
-             this.area_data = areadata	
-             this.base_data = basedata 
-             this.selectBaseChartInit(this.base_data,this.area_data);
-
-            })                 
-        })      
+        this.$root.$on('rose_data', (arr) => {
+            this.rose_data =arr	
+             //this.chartInit(this.sel_base_data)
+            //console.log(this.rose_data)
+            this.roseInit(this.rose_data);
+        })
+          
+        
     },
 
     watch:{
@@ -70,35 +70,75 @@ export default {
 
     methods:{
 
-        selectBaseChartInit(){
-            var roseChart_container = d3.select('#' + this.id)		//matrix_container	
-										.append("svg")		
-										.attr("width", this.width)	
-                                        .attr("height", this.height);
+      roseInit(){
 
-            width = +svg.attr("width"),
-            height = +svg.attr("height"),
-            margin = {top: 40, right: 80, bottom: 40, left: 40},
-            innerRadius = 20,
-            chartWidth = width - margin.left - margin.right,
-            chartHeight= height - margin.top - margin.bottom,
-            outerRadius = (Math.min(chartWidth, chartHeight) / 2),
-            g = svg.append("g").attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-            var angle = d3.scaleLinear()
-                .range([0, 2 * Math.PI]);
+        // var selectBase_container = d3.select('#' + this.id)		//matrix_container	
+				// 						.append("svg")		
+				// 						.attr("width", this.width)	
+        //             .attr("height", this.height);
 
-            var radius = d3.scaleLinear()
-                .range([0, outerRadius]);
+        var dict = {}
+        for(var i=0;i<this.rose_data.length;i++){
+          let key = this.rose_data[i].hour;
+          if(dict[key]==undefined){
+            dict[key] = [];
+            dict[key].push(this.rose_data[i].week)
+          }
+          else{
+            dict[key].push(this.rose_data[i].week)
+          } //时间为key，星期为value组成字典
 
-            var x = d3.scaleBand()
-                .range([0, 2 * Math.PI])
-                .align(0);
-
-            var y = d3.scaleLinear() //you can try scaleRadial but it scales differently
-                .range([innerRadius, outerRadius]);
         }
 
-    },
+        var arr = [];
+        for(let key in dict){             //遍历字典，统计每个元素中星期的数量，重新形成数组arr
+
+          var mon=0
+          var tus=0
+          var wed=0
+          var thur=0
+          var fri=0
+          var sat=0
+          var sun=0
+
+          for(let i=0;i<dict[key].length;i++){
+            
+            
+            if(dict[key][i]==1){
+              mon++;
+            }
+            else if(dict[key][i]==2){
+              tus++;
+            }
+            else if(dict[key][i]==3){
+              wed++;
+            }
+            else if(dict[key][i]==4){
+              thur++;
+            }
+            else if(dict[key][i]==5){
+              fri++;
+            }
+            else if(dict[key][i]==6){
+              sat++;
+            }
+            else if(dict[key][i]==7){
+              sun++;
+            } 
+            
+          }
+          arr.push({"hour":key,"mon":mon,"tus":tus,"wed":wed,"thur":thur,"fri":fri,"sat":sat,"sun":sun})
+          
+        }
+       console.log(arr)
+        
+
+      }
+
+        
+        }
+
+    
 }
 </script>
 <style lang="css">
@@ -111,3 +151,10 @@ export default {
 
 
 </style>
+
+
+
+
+
+
+

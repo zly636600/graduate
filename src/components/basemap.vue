@@ -11,6 +11,7 @@
 <script>
 
 const d3 = require('d3');
+const $ = require('jquery');
 
 import DataProvider from '../DataProvider';
 import * as dsv from 'd3-dsv';
@@ -201,7 +202,10 @@ export default{
               positions.push(projection([d.lon,d.lat])); 
               positions[p].key = d.key;
               positions[p].name = d.name;
+              positions[p].lat = d.lat;
+              positions[p].lon = d.lon;
             })
+            //console.log(positions);
 
             const _voronoi = d3.voronoi()
               .extent([[-1, -1],[innerWidth+1,innerHeight+1]])
@@ -219,7 +223,7 @@ export default{
                  points[0][i] = [];
                  points[0][i]= projection.invert([d[i][0],d[i][1]])
               }
-              points[0][d.length] = projection.invert([d[0][0],d[0][1]])
+              points[0][d.length] = projection.invert([d[0][0],d[0][1]])//首尾连接
               this.mianyang_data.data.geometry.coordinates[0][this.mianyang_data.data.geometry.coordinates.length]=this.mianyang_data.data.geometry.coordinates[0][0]
               let poly1 = turf.polygon(points)
               let poly2 = turf.polygon(this.mianyang_data.data.geometry.coordinates)
@@ -272,8 +276,17 @@ export default{
               //   .attr("fill-opacity",0)
               // })
               .on("click",function(d,i){
+                
                 d3.select("#histogram-chart-container").selectAll("*").remove();
                 that.$root.$emit('baseSelected',dic_base_data[d.data.name])
+                //console.log(d)
+                $.post("http://localhost:3000/re",{'lat':d.data.lat,"lon":d.data.lon},function(data){
+                  console.log(data)
+                  that.arr = data;
+                  that.$root.$emit('rose_data',that.arr);
+                })
+                
+                
               })	
           
         },
