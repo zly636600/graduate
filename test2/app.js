@@ -52,7 +52,7 @@ var connection = mysql.createConnection({
   database:'sss'
 });
 connection.connect();
-
+ 
 
 app.use(bodyParser.urlencoded({ extended: false }))
 //app.use(app.router);

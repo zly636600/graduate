@@ -17,6 +17,7 @@
     "d3-voronoi": "^1.1.4",
     "geojson-area": "^0.2.1",
     "jquery": "^3.4.1",
+    "react": "^16.9.0",
     "turf": "^3.0.14",
     "vue": "^2.5.2",
     "vue-resource": "^1.5.1",

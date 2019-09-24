@@ -281,7 +281,7 @@ export default{
                 that.$root.$emit('baseSelected',dic_base_data[d.data.name])
                 //console.log(d)
                 $.post("http://localhost:3000/re",{'lat':d.data.lat,"lon":d.data.lon},function(data){
-                  console.log(data)
+                  //console.log(data)
                   that.arr = data;
                   that.$root.$emit('rose_data',that.arr);
                 })
