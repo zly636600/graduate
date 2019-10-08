@@ -22,7 +22,7 @@
     <basemap/>
     <histogram/>
     <selectBase/>
-    <roseChart/>
+    <!-- <roseChart/> -->
 
 
   </div>
@@ -35,7 +35,7 @@ import DataProvider from './DataProvider';
 import Basemap from './components/Basemap';
 import histogram from './components/histogram'
 import selectBase from './components/selectBase'
-import roseChart from './components/roseChart'
+//import roseChart from './components/roseChart'
 
 export default {
   name: 'App',
@@ -43,7 +43,7 @@ export default {
     Basemap,
     histogram,
     selectBase,
-    roseChart,
+    //roseChart,
   },
   data () {
     return {
