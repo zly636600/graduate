@@ -59,7 +59,7 @@ export default {
              this.chartInit(this.sel_base_data)
     
         })
-        //console.log(this.sel_base_data)
+        // console.log(this.sel_base_data)
 
       
         
@@ -94,6 +94,7 @@ export default {
             
             var padding = {top:30, right:30, bottom:30, left:30};
             
+
             //定义x轴比例尺			
             let x = d3.scaleLinear()
                 .domain([0,24])
@@ -138,24 +139,54 @@ export default {
 			      // histogram_container.selectAll('.axis').selectAll('text').attr('fill','white').attr('opacity','0.5')
                 
                 
-            var hisRect = histogram_container.append("g")
-                            .style("opacity",0.5);
+            // var hisRect = histogram_container.append("g")
+            //                 .style("opacity",0.5);
                             
-            hisRect.selectAll("rect")
-                    .data(data)
-                    .enter()
-                    .append("rect")
-                    .attr("class","rect")
-                    .attr("x",function(d,i){
-                        return xScale(d.hour);
-                    })
-                    .attr("y", d => yScale(d.count))
-                    .attr("width",function(d,i){
-                        return xScale.bandwidth();
-                    })
-                    .attr("height", d => yScale.range()[0]-yScale(d.count))
-                    .attr("fill","steelblue")
-        
+            // hisRect.selectAll("rect")
+            //         .data(data)
+            //         .enter()
+            //         .append("rect")
+            //         .attr("class","rect")
+            //         .attr("x",function(d,i){
+            //             return xScale(d.hour);
+            //         })
+            //         .attr("y", d => yScale(d.count))
+            //         .attr("width",function(d,i){
+            //             return xScale.bandwidth();
+            //         })
+            //         .attr("height", d => yScale.range()[0]-yScale(d.count))
+            //         .attr("fill","steelblue")
+                          var linePath = d3.line()
+                             .x(function(d){
+                                return xScale(d[0]);
+                             })
+                             .y(function(d){
+                                return yScale(d[1]);
+                             })
+                             .curve(d3.curveMonotoneX)
+
+                var hisPath = histogram_container.append("g")
+                                                .style("opacity",0.5)
+                
+                
+                var hisline = [];
+                for(var i=0;i<=24;i++)  hisline[i] = [i,0]; 
+                for(var i=0;i<data.length;i++){
+                      hisline[data[i].hour] = [data[i].hour,data[i].count]
+                }
+                console.log(hisline)
+                                          hisPath.selectAll("path")
+                                                 .data([1])
+                                                 .enter()
+                                                 .append("path")
+                                                 .attr("d",function(){
+                                                   
+                                                    return linePath(hisline);
+                                                 })
+                                                 .attr("fill","steelblue")
+                                                 .attr("stroke","black")
+                                                 .attr("stroke-width",3)
+                                                 
 
         }
 
@@ -168,6 +199,8 @@ export default {
 .histogram-chart-container{
   
   position:absolute;
+  right: 0%;
+  top: 1%;
 }
 
 

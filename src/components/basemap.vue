@@ -63,8 +63,8 @@ export default{
 					//console.log('on')
 					this.highLightVoronoi(selPoly)
 					
-				})
-
+        })
+        console.log("top:",this.left)
         d3.select(d3.select('#' + this.id).node().parentNode)
                 .style('top', this.top + 'px')
                 .style('left', this.left + 'px')
@@ -124,7 +124,7 @@ export default{
             this.scale = 1
 						 
         	function zoomed() {
-
+            console.log("xxxx",d3.event.transform.x)
                 that.container.attr("transform", "translate(" + 
 								d3.event.transform.x + ","+ 
 								d3.event.transform.y +")scale(" + 
@@ -143,12 +143,13 @@ export default{
 							.attr("height", this.height)
 							.append("g")
 							.call(zoom);
-
+          console.log(this.width)
         	//定义地图投影
         	var projection = d3.geoMercator()
 							.center([104, 31])
 							.scale(15000)
-              .translate([this.width / 2-200 , this.height / 2 +250]);
+              // .translate([this.width / 2-200 , this.height / 2 +250]);
+              .translate([this.width / 4-200 , this.height / 3 +280]);
 
         	//定义路径
         	var path = d3.geoPath()
@@ -278,6 +279,8 @@ export default{
               .on("click",function(d,i){
                 
                 d3.select("#histogram-chart-container").selectAll("*").remove();
+                d3.select("#calendar-chart-container").selectAll("*").remove();
+                
                 that.$root.$emit('baseSelected',dic_base_data[d.data.name])
                 //console.log(d)
                 $.post("http://localhost:3000/re",{'lat':d.data.lat,"lon":d.data.lon},function(data){
@@ -317,9 +320,20 @@ export default{
 <style lang="css">
 
 
-.map-chart-container{
+#basemap-chart-container{
   
   position:absolute;
+  left: 20%;
+  top:1%;
+  width: 50%;
+  height: 70%;
+
+  border:1px solid rgba(0, 0, 0, 0.6);
+  border-radius: 0.3em;
+    box-shadow: 0 0 0 1px hsla(0, 0%, 100%, 0.3) inset,
+  ;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
 }
 
 .province {

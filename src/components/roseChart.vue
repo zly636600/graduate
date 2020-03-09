@@ -10,7 +10,7 @@
 <script>
 
 const d3 = require('d3');
-//var plotly = require('plotly')('username','apiKey');
+//var   plotly = require('plotly')('username','apiKey');
 
 import * as dsv from 'd3-dsv'
 
@@ -94,6 +94,8 @@ export default {
         }
 
         var arr = [];
+        var figure1 = [],figure2 = [],figure3 = [],figure4 = [],figure5 = [],figure6 = []
+        
         for(let key in dict){             //遍历字典，统计每个元素中星期的数量，重新形成数组arr
 
           var mon=0
@@ -131,10 +133,10 @@ export default {
             
           }
           
-          arr.push({"hour":parseInt(key),"mon":mon,"tus":tus,"wed":wed,"thur":thur,"fri":fri,"sat":sat,"sun":sun})
+          arr.push({"hour":parseInt(key),"axis":mon,"tus":tus,"wed":wed,"thur":thur,"fri":fri,"sat":sat,"sun":sun})
           
         }
-        console.log(arr)
+        //console.log(arr)
 
         for(var i = 0;i<24;i++){
           var add_ele = {"hour":i,"mon":0,"tus":0,"wed":0,"thur":0,"fri":0,"sat":0,"sun":0}
@@ -146,34 +148,36 @@ export default {
           }
         }
 
-        // var data_mon = [],data_tus = [],data_wed = [],data_thur = [],data_fri = [],data_sat = [],data_sun = [];
-        // arr.forEach(d=>{
-        //   data_mon.push(d.mon*3)
-        //   data_tue0.push(d.tus*3)
-        //   data_wed0.push(d.wed*3)
-        //   data_thur0.push(d.thur*3)
-        //   data_fri0.push(d.fri*3)
-        //   data_sat0.push(d.sat*3)
-        //   data_sun0.push(d.sun*3)
-        // })
 
-        // var data_tue = data_mon.map(function(value,index){return value +data_tus0[i]});
-        // var data_wed = data_tue.map(function(value,index){return value+data_wed0[i]});
-        // var data_thur = data_wed.map(function(value,index){return value+data_thur0[i]});
-        // var data_fri = data_thur.map(function(value,index){return value+data_fri0[i]});
-        // var data_sat = data_fri.map(function(value,index){return value+data_sat0[i]});
-        // var data_sun = data_sat.map(function(value,index){return value+data_sun0[i]});
-        // var data_mon0 = data_mon.slice(0,6),
-        // data_mon1 = data_mon.slice(6,12),
-        // data_mon2 = data_mon.slice(12,18),
-        // data_mon3 = data_mon.slice(18,24),
-        // data_tus0 = data_tus.slice(0,6),
-        // data_tus1 = data_tus.slice(6,12),
-        // data_tus2 = data_tus.slice(12,18),
-        // data_tus3 = data_tus.slice(18,24),
-        // data_wed0 = data_wed.slice(0,6),
-        // data_wed1 = data_wed.slice(6,12),
-        // data_wed2 = data_wed.slice(12,6),
+
+//         var data_mon = [],data_tue0 = [],data_wed0 = [],data_thur0 = [],data_fri0 = [],data_sat0 = [],data_sun0 = [];
+//         arr.forEach(d=>{
+//           data_mon.push(d.mon*3)
+//           data_tue0.push(d.tus*3)
+//           data_wed0.push(d.wed*3)
+//           data_thur0.push(d.thur*3)
+//           data_fri0.push(d.fri*3)
+//           data_sat0.push(d.sat*3)
+//           data_sun0.push(d.sun*3)
+//         })
+
+//         var data_tue = data_mon.map(function(value,index){return value +data_tue0[i]});
+//         var data_wed = data_tue.map(function(value,index){return value+data_wed0[i]});
+//         var data_thur = data_wed.map(function(value,index){return value+data_thur0[i]});
+//         var data_fri = data_thur.map(function(value,index){return value+data_fri0[i]});
+//         var data_sat = data_fri.map(function(value,index){return value+data_sat0[i]});
+//         var data_sun = data_sat.map(function(value,index){return value+data_sun0[i]});
+//         // var data_mon0 = data_mon.slice(0,6),
+//         // data_mon1 = data_mon.slice(6,12),
+//         // data_mon2 = data_mon.slice(12,18),
+//         // data_mon3 = data_mon.slice(18,24),
+//         // data_tus0 = data_tus.slice(0,6),
+//         // data_tus1 = data_tus.slice(6,12),
+//         // data_tus2 = data_tus.slice(12,18),
+//         // data_tus3 = data_tus.slice(18,24),
+//         // data_wed0 = data_wed.slice(0,6),
+//         // data_wed1 = data_wed.slice(6,12),
+//         // data_wed2 = data_wed.slice(12,6),
        
 //         var time_data0 = ["00:00","01:00","02:00","03:00","04:00","05:00"],
 //         time_data1 = ["06:00","07:00","08:00","09:00","10:00","11:00"],
@@ -247,7 +251,7 @@ export default {
 //   orientation: 270
 // };
 
-// Plotly.newPlot('myDiv', data, layout, {showSendToCloud: true}); 
+// plotly.plot('myDiv', data, layout, {showSendToCloud: true}); 
 
 
 
